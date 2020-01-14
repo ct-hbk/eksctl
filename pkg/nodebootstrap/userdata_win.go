@@ -12,6 +12,7 @@ import (
 func newUserDataForWindows(spec *api.ClusterConfig, ng *api.NodeGroup) (string, error) {
 	bootstrapScript := `<powershell>
 [string]$EKSBootstrapScriptFile = "$env:ProgramFiles\Amazon\EKS\Start-EKSBootstrap.ps1"
+(Get-Content -path "$EKSBootstrapScriptFile" -Raw) -replace '    "RotateKubeletServerCertificate": true','    "RotateKubeletServerCertificate": true,"WindowsGMSA": true' | Set-Content -path "$EKSBootstrapScriptFile"
 `
 
 	kubeletOptions := map[string]string{
